@@ -106,13 +106,14 @@ Object::sys_display(){
 
 
 
-Button::Button(const string& str,int x,int y,void (*f)()){
+Button::Button(const string& str,int x,int y,void (*f)(void*,void*),void* arg){
   this->str=str;
   xpos=x;
   ypos=y;
   width=100;
   height=20;
   this->f=f;
+  this->arg=arg;
 }
 Button::~Button(){
 }
@@ -129,21 +130,30 @@ Button::display(){
 void
 Button::mouse(int button , int state , int x , int y){
   if(this->down){
-    f();
+    f(this,j);
   }
 }
 
+void
+pushed_listbox(void* self,void* arg){
+  Button*  b =(Button*)self;
+  ListBox* lb=(ListBox*)arg;
+  lb->str=b->str;
+}
 
 ListBox::ListBox(int x,int y){
   xpos=x;
   ypos=y;
   width=100;
   height=100;
+  vec.push_back(new Button("label1",0,3, pushed_listbox,this));
+  vec.push_back(new Button("label2",30,3,pushed_listbox,this));
+  vec.push_back(new Button("label3",60,3,pushed_listbox,this));
 
 }
 ListBox::~ListBox(){
 }
-void
+void,
 ListBox::motion(int x , int y){
 }
 void
@@ -151,6 +161,10 @@ ListBox::display(){
   glColor3ub(128,128,128);
   Square(0,0,width,height);
   glColor3ub(0,0,0);
+
+  for(int i=0;i<vec.size();i++)
+    vec[i]->sys_display();
+  
   //  Printf(5,15,str.c_str());
 }
 

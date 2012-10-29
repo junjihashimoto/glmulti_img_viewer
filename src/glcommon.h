@@ -74,19 +74,22 @@ public:
   virtual void sys_display();
 };
 
+template<class>
 struct Button : public Object{
-  void (*f)();
+  void (*f)(void*,void*);
+  void *arg;
   string str;
-  Button(const string& str,int x,int y,void (*f)());
+  Button(const string& str,int x,int y,void (*f)(void*,void*),void* arg=NULL);
   ~Button();
   void motion(int x , int y);
   void display();
   void mouse(int button , int state , int x , int y);
 };
 
+
 struct ListBox : public Object{
-  int id;
-  vector<string> vec;
+  string str;
+  vector<Object*> vec;
   ListBox(int x,int y);
   ~ListBox();
   void motion(int x , int y);

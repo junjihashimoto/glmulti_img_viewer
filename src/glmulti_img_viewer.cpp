@@ -25,7 +25,7 @@ void timer(int value) {
 
 
 void
-print_push(){
+print_push(void*,void*){
   printf("pushed\n");
 }
 
